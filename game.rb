@@ -1,10 +1,22 @@
 class Game
     @@move_pool = ["A1", "A1", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
+    @@win_combos = [
+        ["A1", "A2", "A3"], 
+        ["B1", "B2", "B3"],
+        ["C1", "C2", "C3"],
+        ["A1", "B1", "C1"],
+        ["A2", "B2", "C2"],
+        ["A3", "B3", "C3"],
+        ["A1", "B2", "C3"],
+        ["C1", "B2", "A3"]
+    ]
+
     def initialize
         @move_pool = @@move_pool
-        player1 = Player.new("Player 1", @move_pool)
-        player2 = Player.new("Player 2", @move_pool)
-        board = GameBoard.new(@move_pool)
+        player1 = Player.new("Player 1")
+        player2 = Player.new("Player 2")
+        board = GameBoard.new(@move_pool, @@win_combos)
+        board.display_game
         game_loop
     end
 
@@ -53,7 +65,7 @@ end
 
 class Player
     @@moves = []
-    def initialize(name, array)
+    def initialize(name)
         @name = name
         @moves = @@moves
     end
@@ -61,17 +73,14 @@ class Player
     # and checks if they have won, returning true or false respectively
     def make_move(move)
         @moves.push(move)
-        return check_win ? true : false
-    end
-    # checks if the player's array includes any of the win combinations
-    def check_win
-        if @moves.
+        return GameBoard.check_win(@moves) ? true : false
     end
 end
 
 class GameBoard
-    def initialize(array)
+    def initialize(array, win_combos)
         @move_array = array
+        @win_combos = win_combos
     end
     # replaces the move location in the array with the X or O from the player
     # and calls the display method
@@ -85,5 +94,17 @@ class GameBoard
         puts @move_array[0] + " " + @move_array[1] + " " + @move_array[2]
         puts @move_array[3] + " " + @move_array[4] + " " + @move_array[5]
         puts @move_array[6] + " " + @move_array[7] + " " + @move_array[8]
+    end
+    # 
+    def check_win(move)
+        # loop through each nested array inside the whole array to see if
+        # the player's array includes any win combos and return accordingly
+        @win_combos.each do |nested_combo|
+            has_won = nested_combo.all? { |element| moves.include?(element) }
+            if has_won
+                return true
+            end
+        end
+        return false
     end
 end
