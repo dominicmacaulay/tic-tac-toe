@@ -59,7 +59,7 @@ class Player
 
     def make_move(move)
         @moves.push(move)
-        CheckWin.check_win(@moves)
+        return CheckWin.check_win(@moves) ? true : false
     end
 end
 
