@@ -4,13 +4,14 @@ class Game
         @move_pool = @@move_pool
         player1 = Player.new("Player 1")
         player2 = Player.new("Player 2")
+        board = GameBoard.new(@move_pool)
         game_loop
     end
 
     def game_loop
         game = "ongoing"
         player = 1
-        play
+        move
         # loops until the game is over
         until game == "over"
             player == 1 ? mark = "X" : mark = "O"
@@ -25,7 +26,7 @@ class Game
             # removes the move from the available move pool
             @move_pool.delete(move)
             # calls the method to display the game board
-            GameBoard.display_game(move, mark)
+            board.show_move(move, mark)
             # calls respective player methods to see if, after the move, they have won
             # and then satisfies the game loop and indicates the winner
             if player == 1
@@ -56,19 +57,32 @@ class Player
         @name = name
         @moves = @@moves
     end
-
+    # adds the move to this player's array to track all of their moves
+    # and checks if they have won, returning true or false respectively
     def make_move(move)
         @moves.push(move)
-        return CheckWin.check_win(@moves) ? true : false
+        return check_win(@moves) ? true : false
+    end
+    # checks if the player's array includes any of the win combinations
+    def check_win(move_array)
     end
 end
 
 class GameBoard
-    def display_game(move_array)
+    def initialize(array)
+        @move_array = array
     end
-end
-
-class CheckWin
-    def check_win(move_array)
+    # replaces the move location in the array with the X or O from the player
+    # and calls the display method
+    def show_move(move, mark)
+        @move_array.map! { |x| x == move ? mark : x }
+        display_game
+    end
+    # displays the array in a readable way to produce a game board in the
+    # console
+    def display_game
+        puts @move_array[0] + " " + @move_array[1] + " " + @move_array[2]
+        puts @move_array[3] + " " + @move_array[4] + " " + @move_array[5]
+        puts @move_array[6] + " " + @move_array[7] + " " + @move_array[8]
     end
 end
