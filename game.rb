@@ -2,8 +2,8 @@ class Game
     @@move_pool = ["A1", "A1", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
     def initialize
         @move_pool = @@move_pool
-        player1 = Player.new("Player 1")
-        player2 = Player.new("Player 2")
+        player1 = Player.new("Player 1", @move_pool)
+        player2 = Player.new("Player 2", @move_pool)
         board = GameBoard.new(@move_pool)
         game_loop
     end
@@ -53,7 +53,7 @@ end
 
 class Player
     @@moves = []
-    def initialize(name)
+    def initialize(name, array)
         @name = name
         @moves = @@moves
     end
@@ -61,10 +61,11 @@ class Player
     # and checks if they have won, returning true or false respectively
     def make_move(move)
         @moves.push(move)
-        return check_win(@moves) ? true : false
+        return check_win ? true : false
     end
     # checks if the player's array includes any of the win combinations
-    def check_win(move_array)
+    def check_win
+        if @moves.
     end
 end
 
